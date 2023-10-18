@@ -23,13 +23,18 @@ $uwpRubbishApps = @(
   "Microsoft.MicrosoftSolitaireCollection",
   "Microsoft.MicrosoftOfficeHub",
   "Microsoft.WindowsFeedbackHub",
-  "SpotifyAB.SpotifyMusic",
   "TeamViewer.TeamViewer.Host",
 )
 
 foreach ($uwp in $uwpRubbishApps) {
   Get-AppxPackage -Name $uwp | Remove-AppxPackage
 }
+
+# -----------------------------------------------------------------------------
+# Install WSL
+Write-Host ""
+Write-Host "Installing WSL..." -ForegroundColor Green
+wsl --install
 
 # -----------------------------------------------------------------------------
 # Install Winget apps
@@ -43,7 +48,7 @@ else {
   if (!$hasPackageManager -or [version]$hasPackageManager.Version -lt [version]"1.10.0.0") {
     Start-Process ms-appinstaller:?source=https://aka.ms/getwinget
     Read-Host -Prompt "Press enter to continue..."
-}
+  }
 }
 
 Write-Host ""
@@ -60,16 +65,23 @@ else {
 }
 
 $Apps= @(
-  "Google.Chrome",
-  "JanDeDobbeleer.OhMyPosh",
-  "Microsoft.PowerToys",
+  "Discord.Discord",
+  "Opera.OperaGX",
+  "Valve.Steam",
+  "Mojang.MinecraftLauncher",
+  "VideoLAN.VLC",
+  "RARLab.WinRAR",
+  "Nvidia.GeForceExperience",
   "Microsoft.VisualStudioCode",
-  "Postman.Postman",
-  "SlackTechnologies.Slack",
-  "QL-Win.QuickLook"
+  "Docker.DockerDesktop"
+  "marha.VcXsrv",
+  "Microsoft.PowerToys",
+  "QL-Win.QuickLook",
+  "Microsoft.MouseWithoutBorders",
 )
 
 foreach ($app in $Apps) {
+  Write-Host "Instalando $app..."
   winget install --id=$app -e --silent
 }
 
@@ -80,41 +92,10 @@ Write-Host "------------------------------------" -ForegroundColor Green
 Set-MpPreference -PUAProtection 1
 
 # -----------------------------------------------------------------------------
-# Disable Autoplay
-Write-Host "Disabling Autoplay..." -ForegroundColor Green
-Write-Host "------------------------------------" -ForegroundColor Green
-Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\AutoplayHandlers" -Name "DisableAutoplay" -Type DWord -Value 1
-
-# -----------------------------------------------------------------------------
-# Disable Autorun for all drives
-Write-Host "Disabling Autorun for all drives..." -ForegroundColor Green
-Write-Host "------------------------------------" -ForegroundColor Green
-If (!(Test-Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer")) {
-  New-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer" | Out-Null
-}
-Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer" -Name "NoDriveTypeAutoRun" -Type DWord -Value 255
-
-# -----------------------------------------------------------------------------
-# Disable Windows Update P2P delivery optimization (WUDO) completely
-Write-Host "Disabling Windows Update P2P optimization (WUDO)..." -ForegroundColor Green
-Write-Host "------------------------------------" -ForegroundColor Green
-If (!(Test-Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\DeliveryOptimization")) {
-  New-Item -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\DeliveryOptimization" | Out-Null
-}
-Set-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\DeliveryOptimization" -Name "DODownloadMode" -Type DWord -Value 100
-
-# -----------------------------------------------------------------------------
-# Install WSL
+# Install Fira Code Font
 Write-Host ""
-Write-Host "Installing WSL..." -ForegroundColor Green
-wsl --install
-
-# -----------------------------------------------------------------------------
-# Install Nerd Font
-# To see the icons displayed in Oh My Posh, install a Nerd Font, and configure your terminal to use it
-Write-Host ""
-Write-Host "Installing Nerd Font on Oh-My-Posh..." -ForegroundColor Green
-oh-my-posh font install
+Write-Host "Installing Fira Code font..." -ForegroundColor Green
+./fontInstall.ps1
 
 # -----------------------------------------------------------------------------
 # Restart Windows
