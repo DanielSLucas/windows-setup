@@ -23,7 +23,7 @@ $uwpRubbishApps = @(
   "Microsoft.MicrosoftSolitaireCollection",
   "Microsoft.MicrosoftOfficeHub",
   "Microsoft.WindowsFeedbackHub",
-  "TeamViewer.TeamViewer.Host",
+  "TeamViewer.TeamViewer.Host"
 )
 
 foreach ($uwp in $uwpRubbishApps) {
@@ -77,7 +77,7 @@ $Apps= @(
   "marha.VcXsrv",
   "Microsoft.PowerToys",
   "QL-Win.QuickLook",
-  "Microsoft.MouseWithoutBorders",
+  "Microsoft.MouseWithoutBorders"
 )
 
 foreach ($app in $Apps) {
